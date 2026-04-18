@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Rage Click Fixer | Detect Dead Clicks and UX Friction</title>
+  <meta name="description" content="Demo for Rage Click Fixer, a lightweight JavaScript tool that detects rage clicks, dead interactions, and blocked UI flows.">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    "name": "Rage Click Fixer",
+    "description": "Lightweight JavaScript for detecting rage clicks, dead interactions, and blocked UI flows.",
+    "programmingLanguage": "JavaScript",
+    "runtimePlatform": "Web Browser",
+    "codeRepository": "https://github.com/limitwebdesign/rage-click-fixer",
+    "author": {
+      "@type": "Person",
+      "name": "Viorel Ciprian Brisc",
+      "url": "https://www.limit.ro/viorel-brisc.html"
+    },
+    "dateCreated": "2026-04-18"
+  }
+  </script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #cbd5e1;
+      max-width: 720px;
+    }
+
+    button {
+      padding: 12px 20px;
+      margin: 10px 10px 10px 0;
+      cursor: pointer;
+      border: 0;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    .disabled {
+      opacity: 0.45;
+    }
+
+    #realAction {
+      background: #60a5fa;
+      color: #0f172a;
+    }
+
+    .helper {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #111827;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.25s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    .helper.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .highlight {
+      outline: 3px solid #f87171;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Rage Click Fixer Demo</h1>
+  <p>Try clicking the disabled button multiple times in the same area. The script detects repeated frustration clicks and highlights a likely working path.</p>
+
+  <button class="disabled" aria-disabled="true" id="fakeSubmit">Submit</button>
+  <button id="realAction">Real Working Button</button>
+
+  <div id="helper" class="helper"></div>
+
+  <script>
+    let clicks = [];
+    const rageThreshold = 4;
+    const timeWindow = 1200;
+    const radius = 56;
+
+    document.addEventListener("click", (event) => {
+      const now = Date.now();
+
+      clicks.push({
+        time: now,
+        x: event.clientX,
+        y: event.clientY,
+        target: event.target
+      });
+
+      clicks = clicks.filter(click => now - click.time <= timeWindow);
+      detectRage();
+    });
+
+    function detectRage() {
+      if (clicks.length < rageThreshold) return;
+
+      const recent = clicks.slice(-rageThreshold);
+      const first = recent[0];
+      const last = recent[recent.length - 1];
+      const distance = Math.hypot(first.x - last.x, first.y - last.y);
+
+      if (distance <= radius) {
+        handleRage(last.target);
+        clicks = [];
+      }
+    }
+
+    function handleRage(target) {
+      const disabled =
+        target.matches?.(":disabled") ||
+        target.getAttribute?.("aria-disabled") === "true" ||
+        target.classList?.contains("disabled") ||
+        target.classList?.contains("is-disabled");
+
+      if (disabled) {
+        showHelper("This action looks disabled. Try the highlighted path.");
+      } else {
+        showHelper("A likely friction point was detected. Try the highlighted path.");
+      }
+
+      const next = findNearestClickable(target);
+      if (next) {
+        highlight(next);
+        next.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }
+
+    function showHelper(text) {
+      const helper = document.getElementById("helper");
+      helper.textContent = text;
+      helper.classList.add("show");
+      clearTimeout(helper._timeout);
+      helper._timeout = setTimeout(() => {
+        helper.classList.remove("show");
+      }, 2800);
+    }
+
+    function highlight(el) {
+      el.classList.add("highlight");
+      setTimeout(() => {
+        el.classList.remove("highlight");
+      }, 1800);
+    }
+
+    function findNearestClickable(target) {
+      const elements = [...document.querySelectorAll("button, a, input, select, textarea, [role='button']")];
+      const valid = elements.filter(el => {
+        if (el === target) return false;
+
+        const disabled =
+          el.matches?.(":disabled") ||
+          el.getAttribute?.("aria-disabled") === "true" ||
+          el.classList?.contains("disabled") ||
+          el.classList?.contains("is-disabled");
+
+        const style = window.getComputedStyle(el);
+        const hidden = style.display === "none" || style.visibility === "hidden";
+
+        return !disabled && !hidden;
+      });
+
+      const targetRect = target.getBoundingClientRect();
+      let closest = null;
+      let minDist = Infinity;
+
+      for (const el of valid) {
+        const rect = el.getBoundingClientRect();
+        const dist = Math.hypot(rect.left - targetRect.left, rect.top - targetRect.top);
+
+        if (dist < minDist) {
+          minDist = dist;
+          closest = el;
+        }
+      }
+
+      return closest;
+    }
+
+    document.getElementById("realAction").addEventListener("click", () => {
+      alert("Working path completed.");
+    });
+  </script>
+
+</body>
+</html>
