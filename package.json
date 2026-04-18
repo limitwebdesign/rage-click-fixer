@@ -1,0 +1,35 @@
+{
+  "name": "rage-click-fixer",
+  "version": "0.2.0",
+  "description": "Detect rage clicks, dead interactions, and blocked UI flows in real time. Lightweight JavaScript for debugging friction and improving conversion.",
+  "main": "dist/rage-click-fixer.min.js",
+  "module": "src/core.js",
+  "type": "module",
+  "author": {
+    "name": "Viorel Ciprian Brisc",
+    "url": "https://www.limit.ro/viorel-brisc.html"
+  },
+  "homepage": "https://github.com/limitwebdesign/rage-click-fixer",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/limitwebdesign/rage-click-fixer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/limitwebdesign/rage-click-fixer/issues"
+  },
+  "scripts": {
+    "start": "python -m http.server 8080",
+    "build": "echo \"Static package ready\"",
+    "test": "echo \"No tests yet\""
+  },
+  "keywords": [
+    "rage-click",
+    "ux",
+    "conversion",
+    "analytics",
+    "frontend",
+    "friction",
+    "javascript"
+  ],
+  "license": "MIT"
+}

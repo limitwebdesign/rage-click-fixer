@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Rage Click Fixer | Detect Dead Clicks and UX Friction</title>
+  <meta name="description" content="Interactive demo for Rage Click Fixer, a lightweight JavaScript tool that detects rage clicks, dead interactions, and blocked UI flows.">
+  <meta property="og:title" content="Rage Click Fixer">
+  <meta property="og:description" content="Detect rage clicks, dead interactions, and blocked UI flows before they kill conversion.">
+  <meta property="og:type" content="website">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    "name": "Rage Click Fixer",
+    "description": "Lightweight JavaScript for detecting rage clicks, dead interactions, and blocked UI flows.",
+    "programmingLanguage": "JavaScript",
+    "runtimePlatform": "Web Browser",
+    "codeRepository": "https://github.com/limitwebdesign/rage-click-fixer",
+    "author": {
+      "@type": "Person",
+      "name": "Viorel Ciprian Brisc",
+      "url": "https://www.limit.ro/viorel-brisc.html"
+    },
+    "dateCreated": "2026-04-18",
+    "license": "https://opensource.org/licenses/MIT"
+  }
+  </script>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">Front-end friction diagnostics</span>
+        <h1>Users keep clicking. Your UI keeps failing.</h1>
+        <p class="lede">Rage Click Fixer detects repeated dead clicks, disabled traps, and blocked UI flows in real time. It highlights a likely working path and emits clean events your team can log or analyze.</p>
+        <div class="hero-actions">
+          <button class="primary" id="workingPrimary">Working checkout action</button>
+          <button class="secondary is-disabled" id="submitDisabled" aria-disabled="true">Disabled submit trap</button>
+        </div>
+        <ul class="feature-list">
+          <li>Rage-click detection</li>
+          <li>Dead-zone heuristics</li>
+          <li>Live debug overlay</li>
+          <li>Structured event export</li>
+        </ul>
+      </div>
+      <aside class="hero-panel">
+        <div class="stat-card">
+          <span class="stat-kicker">Live signal</span>
+          <strong id="eventCount">0</strong>
+          <span class="stat-copy">friction events detected</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-kicker">Best use case</span>
+          <strong>Ecommerce and product UX</strong>
+          <span class="stat-copy">Drop it into broken flows and watch where users get stuck.</span>
+        </div>
+      </aside>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Broken checkout block</h2>
+        <p>Repeated clicks on the disabled action should trigger helper guidance and highlight a viable next step.</p>
+        <button class="ghost is-disabled" aria-disabled="true">Complete order</button>
+      </article>
+
+      <article class="card">
+        <h2>Dead-click zone</h2>
+        <p>Click this misleading panel rapidly to simulate a non-interactive area that looks actionable.</p>
+        <div class="dead-zone" id="deadZone">
+          <span>Looks clickable, but it is not.</span>
+        </div>
+        <button class="primary" id="saveProfile">Save profile</button>
+      </article>
+
+      <article class="card">
+        <h2>Live event stream</h2>
+        <p>Every detection emits a browser event. Use it for QA logs, CRO reports, or product telemetry.</p>
+        <pre id="eventLog">Waiting for signals...</pre>
+      </article>
+    </section>
+  </main>
+  <script type="module" src="./demo.js"></script>
+</body>
+</html>

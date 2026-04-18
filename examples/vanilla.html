@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Vanilla example | Rage Click Fixer</title>
+</head>
+<body>
+  <h1>Vanilla example</h1>
+  <button class="disabled" aria-disabled="true">Disabled path</button>
+  <button id="ok">Working path</button>
+
+  <script type="module">
+    import { RageClickFixer } from "../src/core.js";
+    const fixer = new RageClickFixer({ overlay: true, showHelper: true });
+    fixer.start();
+    window.addEventListener("rcf:event", (event) => console.log(event.detail));
+    document.getElementById("ok").addEventListener("click", () => alert("Success"));
+  </script>
+</body>
+</html>
